@@ -8,6 +8,50 @@
   <link rel="stylesheet" href="assets/css/design-system.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a1a1a'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-family='system-ui' font-weight='800'>O</text></svg>">
+  <style>
+    .section-header--dark {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      padding: 64px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-header--dark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.02) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .section-header--dark h2 {
+      color: #ffffff;
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      margin: 0 0 16px 0;
+      position: relative;
+    }
+    .section-header--dark p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .section-header--dark::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 48px;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+    }
+  </style>
 </head>
 <body>
 
@@ -36,7 +80,7 @@
         
         Now available on macOS and Windows
       </div>
-      <h1 style="font-size: 72px;">Omni<br>One App.  <span class="highlight">Every Agent.</span></h1>
+      <h1 style="font-size: 72px;">Omni<br><span class="highlight">One App. Every Agent.</span></h1>
       <p>Omni is the all-in-one agentic workspace for macOS and iPadOS. Chat, code, design, manage — all powered by local and remote AI models.</p>
       <div class="hero-actions">
         <a href="#download" class="btn btn-primary btn-lg">Get Omni now</a>
@@ -46,8 +90,8 @@
 
     <!-- What You Can Do -->
     <section class="section reveal">
-      <div class="section-header" style="background: none rgb(30, 30, 30); padding: 24px;">
-        <h2 style="color: rgb(255, 255, 255);">What You Can Do</h2>
+      <div class="section-header section-header--dark">
+        <h2>What You Can Do</h2>
         <p>Four pillars of productivity. Everything you need, unified in a single beautiful workspace.</p>
       </div>
       <div class="cards-grid reveal-children">
