@@ -1,173 +1,423 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Omni — One App. Every Agent.</title>
-  <meta name="description" content="Omni is the all-in-one agentic workspace for macOS and iPadOS. Chat, code, design, manage — all powered by local and remote AI models.">
-  <link rel="stylesheet" href="assets/css/design-system.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231a1a1a'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-family='system-ui' font-weight='800'>O</text></svg>">
-  <style>
-    .section-header--dark {
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-      padding: 64px 32px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OmniStack — The Agentic Platform</title>
+<meta name="description" content="OmniStack — the agentic platform that does the work, not just the talking. Missions, Agents, workflows, design systems and more. Your models, your files, your approval." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5' fill='none' stroke='%2300f0ff' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff2fd6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script>
+  /* First-visit-only boot loader: hide it instantly on return visits
+     (before first paint) so the animation never flashes. */
+  (function () {
+    var KEY = "omnistack-booted";
+    var seen = false;
+    try { seen = !!localStorage.getItem(KEY); } catch (e) {
+      try { seen = !!sessionStorage.getItem(KEY); } catch (e2) {}
     }
-    .section-header--dark::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.03) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.02) 0%, transparent 40%);
-      pointer-events: none;
+    if (seen) {
+      document.documentElement.classList.add("skip-boot");
+    } else {
+      try { localStorage.setItem(KEY, "1"); } catch (e) {
+        try { sessionStorage.setItem(KEY, "1"); } catch (e2) {}
+      }
     }
-    .section-header--dark h2 {
-      color: #ffffff;
-      font-size: 48px;
-      font-weight: 700;
-      letter-spacing: -1.5px;
-      margin: 0 0 16px 0;
-      position: relative;
-    }
-    .section-header--dark p {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 18px;
-      line-height: 1.6;
-      max-width: 520px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .section-header--dark::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 48px;
-      height: 3px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 2px;
-    }
-  </style>
+  })();
+</script>
 </head>
-<body>
+<body data-loading>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="index.html" class="navbar-logo">
-      <img src="assets/images/img_logo.png" alt="Omni" class="logo-icon">
-      OmniSystem
+  <!-- ══ Boot loader ══ -->
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot-inner">
+      <div class="boot-logo">OMNI<span>STACK</span></div>
+      <div class="boot-bar"><div class="boot-fill" id="boot-fill"></div></div>
+      <div class="boot-status" id="boot-status">INITIALIZING PLATFORM…</div>
+    </div>
+  </div>
+
+  <!-- ══ Three.js scene layers ══ -->
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- ══ Custom cursor ══ -->
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ══ Scroll progress ══ -->
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-fill" id="scroll-progress-fill"></div></div>
+
+  <!-- ══ Nav ══ -->
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top" data-hover>
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <polygon points="16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5" fill="none" stroke="var(--cyan)" stroke-width="2.4"/>
+        <circle cx="16" cy="16" r="4" fill="var(--magenta)"/>
+      </svg>
+      <span>OMNI<em>STACK</em></span>
     </a>
-    <ul class="navbar-links" id="navbar-links">
-      <li><a href="features.html">Features</a></li>
-      <li><a href="support.html">Support</a></li>
-      <li><a href="#download" class="btn btn-primary" style="color: rgb(255, 255, 255); padding: 8px 16px;">Get Omni</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-  </nav>
+    <nav class="nav-links">
+      <a href="#features" data-hover>Features</a>
+      <a href="#replaces" data-hover>Replaces</a>
+      <a href="docs.html" data-hover>Docs</a>
+      <a href="#download" data-hover>Download</a>
+    </nav>
+    <a href="#download" class="btn btn-small btn-primary" data-hover data-magnet>
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+      Get OmniStack
+    </a>
+  </header>
 
-  <!-- Hero -->
-  <main>
-    <section class="hero" style="padding: 96px 24px;">
-      <div class="hero-badge">
-        
-        Now available on macOS and Windows
+  <main id="top">
+
+    <!-- ══ Hero ══ -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge" data-reveal>
+          <span class="pulse-dot" aria-hidden="true"></span>
+          AGENT PLATFORM · BETA 1
+        </div>
+        <h1 class="hero-title" data-reveal>
+          <span class="line">YOUR AI DOESN'T</span>
+          <span class="line">JUST <span class="glitch" data-text="CHAT.">CHAT.</span></span>
+          <span class="line grad">IT GETS THINGS DONE.</span>
+        </h1>
+        <p class="hero-sub" style="max-width: 1180px;" data-reveal>
+          Give it a question, a project, or a durable <strong>Mission</strong>. OmniStack researches, codes,
+          designs, automates and operates tools — with <strong>your models, your files, and your approval</strong>
+          at every sensitive boundary.
+        </p>
+        <div class="hero-cta" data-reveal>
+          <a href="#download" class="btn btn-primary btn-lg" data-hover data-magnet>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+            Download Free
+          </a>
+          <button class="btn btn-ghost btn-lg" id="open-demo" data-hover data-magnet>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>
+            See it in Action
+          </button>
+        </div>
+        <div class="hero-stats" data-reveal>
+          <div class="stat"><span class="stat-num" data-count="8">0</span><span class="stat-label">Run strategies</span></div>
+          <div class="stat-sep" aria-hidden="true"></div>
+          <div class="stat"><span class="stat-num" data-count="500">0</span><span class="stat-label">Step run budget</span></div>
+          <div class="stat-sep" aria-hidden="true"></div>
+          <div class="stat"><span class="stat-num" data-count="100" data-suffix="%">0</span><span class="stat-label">Open harness</span></div>
+        </div>
       </div>
-      <h1 style="font-size: 72px;">Omni<br><span class="highlight">One App. Every Agent.</span></h1>
-      <p>Omni is the all-in-one agentic workspace for macOS and iPadOS. Chat, code, design, manage — all powered by local and remote AI models.</p>
-      <div class="hero-actions">
-        <a href="#download" class="btn btn-primary btn-lg">Get Omni now</a>
-        <a href="#" class="btn btn-ghost btn-lg">Watch Demo ▶</a>
+      <div class="scroll-hint" aria-hidden="true">
+        <div class="scroll-hint-track"><div class="scroll-hint-dot"></div></div>
+        SCROLL
       </div>
     </section>
 
-    <!-- What You Can Do -->
-    <section class="section reveal">
-      <div class="section-header section-header--dark">
-        <h2>What You Can Do</h2>
-        <p>Four pillars of productivity. Everything you need, unified in a single beautiful workspace.</p>
+    <!-- ══ Marquee ══ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-set">
+          <span>MISSIONS</span><i>◆</i><span>STATIC AGENTS</span><i>◆</i><span>WORKFLOWS</span><i>◆</i><span>AGENT APPS</span><i>◆</i><span>DESIGN SYSTEMS</span><i>◆</i><span>PRESENTATIONS</span><i>◆</i><span>COMPUTER USE</span><i>◆</i><span>MCP SERVERS</span><i>◆</i>
+        </div>
+        <div class="marquee-set">
+          <span>MISSIONS</span><i>◆</i><span>STATIC AGENTS</span><i>◆</i><span>WORKFLOWS</span><i>◆</i><span>AGENT APPS</span><i>◆</i><span>DESIGN SYSTEMS</span><i>◆</i><span>PRESENTATIONS</span><i>◆</i><span>COMPUTER USE</span><i>◆</i><span>MCP SERVERS</span><i>◆</i>
+        </div>
       </div>
-      <div class="cards-grid reveal-children">
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
+    </div>
+
+    <!-- ══ Missions spotlight ══ -->
+    <section class="section" id="missions">
+      <div class="section-head" data-reveal>
+        <div class="section-tag">// DURABLE OBJECTIVES</div>
+        <h2 class="section-title">Missions, not endless<br/><span class="grad">follow-up prompts.</span></h2>
+        <p class="section-sub">Give OmniStack an outcome, not another prompt. A Mission keeps success criteria,
+        budgets, evidence and checkpoints — it pauses for input, survives interruption, and resumes without
+        pretending lost work never happened.</p>
+      </div>
+      <div class="mission-demo" data-reveal>
+        <div class="terminal" id="terminal">
+          <div class="terminal-bar">
+            <span class="t-dot t-red"></span><span class="t-dot t-yellow"></span><span class="t-dot t-green"></span>
+            <span class="terminal-title">omnistack — mission.kernel</span>
           </div>
-          <h3>Chat</h3>
-          <p>AI chat with any model. Ask questions, brainstorm ideas, get instant answers.</p>
+          <div class="terminal-body">
+            <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd" id="typed-cmd"></span><span class="t-caret" aria-hidden="true"></span></div>
+            <div class="t-line t-out">▸ Strategy selected: <b>coding</b> · budget 500 steps · approvals on</div>
+            <div class="t-line t-out">▸ Inspecting workspace… <b>142 files</b> scanned, 9 failing tests found</div>
+            <div class="t-line t-out">▸ Checkpoint saved · evidence attached · public API preserved</div>
+            <div class="t-line t-ok">✔ MISSION COMPLETE — 9/9 tests green · outcome ready to explore</div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
+        <div class="mission-points">
+          <div class="point" data-hover>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 21c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm0-4c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+            <div><h3>Outcome-first</h3><p>Describe the result in plain language. OmniStack drafts the strategy, criteria and notifications for your review.</p></div>
           </div>
-          <h3>Code</h3>
-          <p>Write, debug, and refactor code with AI assistance built right in.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="18" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="10" rx="1"></rect>
-            </svg>
+          <div class="point" data-hover>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 5h16v4H4zM4 11h10v4H4zM4 17h16v2H4z"/></svg>
+            <div><h3>Evidence trail</h3><p>Append-only events, checkpoints and budget usage. Nothing vanishes — resume any run exactly where it stopped.</p></div>
           </div>
-          <h3>Kanban</h3>
-          <p>Manage projects visually with drag-and-drop boards and smart automation.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-              <path d="M2 2l7.586 7.586"></path>
-              <circle cx="11" cy="11" r="2"></circle>
-            </svg>
+          <div class="point" data-hover>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M8.5 12l2.5 2.5 4.5-4.5"/></svg>
+            <div><h3>Permissioned at the boundary</h3><p>Network, shell, secrets and computer input are separate grants — enforced in the host, decided by you.</p></div>
           </div>
-          <h3>Design Board</h3>
-          <p>Figma-like design board for wireframes, prototypes, and visual thinking.</p>
+          <div class="point" data-hover>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 8v5l3 2M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"/></svg>
+            <div><h3>Scheduled &amp; monitored</h3><p>Re-check a changing condition on a schedule, get desktop or phone alerts, explore the result in a linked chat.</p></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section reveal" style="text-align: center;" id="download">
-      <div class="section-header">
-        <h2>Ready to get started?</h2>
-        <p>Start using Omni today and have the flow you want</p>
+    <!-- ══ Feature grid ══ -->
+    <section class="section" id="features">
+      <div class="section-head" data-reveal>
+        <div class="section-tag">// ONE OBJECTIVE, EIGHT WAYS TO EXECUTE IT</div>
+        <h2 class="section-title">The command center<br/><span class="grad">under the chat box.</span></h2>
       </div>
-      <div class="download-buttons" style="display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <a href="#" class="btn btn-primary btn-lg download-btn" style="display: inline-flex; align-items: center; gap: 12px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path>
-          </svg>
-          Download for macOS
+      <div class="feature-grid" id="feature-grid">
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 21c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm0-4.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM12 13.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg></div>
+          <h3>Missions</h3>
+          <p>Durable objectives with success criteria, budgets, checkpoints and evidence. They pause, survive interruption and resume.</p>
+          <div class="card-ex">“Get the test suite green” → inspects, changes, tests, verifies.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 6h7v7H4zM13 11h7v7h-7zM11 9.5h2M7 13v3.5a1.5 1.5 0 0 0 1.5 1.5H11"/><circle cx="7.5" cy="9.5" r="1.4" fill="currentColor"/><circle cx="16.5" cy="14.5" r="1.4" fill="currentColor"/></svg></div>
+          <h3>Workflows</h3>
+          <p>Describe a repeatable process and save it as a readable flowchart — executed by the same durable run engine as Missions.</p>
+          <div class="card-ex">“Run the weekly release-readiness workflow against this repo.”</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 12a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zM5 20c0-3.9 3.1-6 7-6s7 2.1 7 6"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M17.5 4.5l1 2 2 .4-1.5 1.4.3 2.1-1.8-1-1.8 1 .3-2.1L14.5 7l2-.4z"/></svg></div>
+          <h3>Static Agents</h3>
+          <p>Specialists with a model, a standing prompt and memory that carries across work. Switch from raw model to your release engineer in one click.</p>
+          <div class="card-ex">Describe your standards once — select the Agent forever.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M13 2L4.5 13.5H11L9.5 22 19 9.5h-6.5z"/></svg></div>
+          <h3>Agent Apps</h3>
+          <p>Ask the model to build the missing tool. Apps call APIs, hold encrypted secrets, run sandboxed shell — and stay available across conversations.</p>
+          <div class="card-ex">“Build a stock watcher with alerts” → approve once, reuse anywhere.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 19l5-11 4 7 3-4 4 8z"/><circle cx="17" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></div>
+          <h3>Design Systems</h3>
+          <p>Generate a real token stylesheet from a brief or reference image. Preview the component gallery, restyle, save, reuse everywhere.</p>
+          <div class="card-ex">Your brand as tokens — decks and artifacts stay coherent.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M6 8h6M6 11h9M9 21h6M12 17v4"/></svg></div>
+          <h3>Presentations</h3>
+          <p>Research a subject, approve the slide-by-slide outline, generate a styled deck. Present fullscreen or export to PPTX.</p>
+          <div class="card-ex">Subject → outline → approval → deck. No blank-slide dread.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M9 18l-5-6 5-6M15 6l5 6-5 6M13 4l-2 16"/></svg></div>
+          <h3>Visualizations</h3>
+          <p>Simulations, state machines and interactive explainers with real controls — preserved as artifacts, not flattened into paragraphs.</p>
+          <div class="card-ex">“Show me how this algorithm behaves” → playable HTML.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="2.5" y="4" width="15" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="15.5" y="8.5" width="6" height="11" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M6 19h8"/></svg></div>
+          <h3>Desktop + Mobile</h3>
+          <p>The Electron app pairs with an Expo companion. A durable run started at your desk stays inspectable — and approvable — from your phone.</p>
+          <div class="card-ex">Desktop brain, pocket companion.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="6" cy="6" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="6" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="18" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M7.8 7.8l3 8M16.2 7.8l-3 8M8.4 6h7.2"/></svg></div>
+          <h3>MCP + Skills</h3>
+          <p>Register MCP servers and create reusable Skills — with slash commands — straight from the conversation. No installers, no silos.</p>
+          <div class="card-ex">“Turn this checklist into /release-audit” → done.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M8.5 12l2.5 2.5 4.5-4.5"/></svg></div>
+          <h3>Permissioned Power</h3>
+          <p>High capability, gated at the boundary. Every grant is visible, revocable, and enforced in the host process — not a hidden button.</p>
+          <div class="card-ex">Power when you enable it. A clear warning when it matters.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 5h16v11H4zM4 8h16M7 12h4M7 14h7"/><circle cx="17.5" cy="17.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M17.5 15.8v1.7l1.2 1"/></svg></div>
+          <h3>Computer Use</h3>
+          <p>APIs first, the screen when needed. A distinct handover before any mouse or keyboard input — ordered, bounded, interruptible.</p>
+          <div class="card-ex">Look, act, look again — control released when the run ends.</div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+          <div class="card-glow" aria-hidden="true"></div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 2.5l2.4 6.1 6.6.3-5.1 4.1 1.7 6.3L12 15.8l-5.6 3.5 1.7-6.3L3 8.9l6.6-.3z"/></svg></div>
+          <h3>Bring Your Models</h3>
+          <p>Connect multiple providers, pick a model per conversation, dial thinking effort from none to max. The harness is open — yours, not a walled garden.</p>
+          <div class="card-ex">Your workspace, accounts, models and rules.</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ══ What it replaces ══ -->
+    <section class="section" id="replaces">
+      <div class="section-head" data-reveal>
+        <div class="section-tag">// CONSOLIDATE THE STACK</div>
+        <h2 class="section-title">One window.<br/><span class="grad">Zero tab-hopping.</span></h2>
+      </div>
+      <div class="replaces-table" data-reveal>
+        <div class="r-row r-head"><span>Tool you know</span><span class="r-arrow" aria-hidden="true">→</span><span>OmniStack instead</span></div>
+        <div class="r-row" data-hover><span>ChatGPT / Claude web chat</span><span class="r-arrow" aria-hidden="true">→</span><span>A full agent with memory, files, tools and approvals — not a dead-end text box.</span></div>
+        <div class="r-row" data-hover><span>Copilot / Cursor</span><span class="r-arrow" aria-hidden="true">→</span><span>A coding strategy that inspects the repo, edits files, runs tests and verifies.</span></div>
+        <div class="r-row" data-hover><span>Task brief + a reminder</span><span class="r-arrow" aria-hidden="true">→</span><span>Durable Missions with criteria, budgets, checkpoints, evidence and resume.</span></div>
+        <div class="r-row" data-hover><span>Zapier / Make</span><span class="r-arrow" aria-hidden="true">→</span><span>Saved visual workflows executed by the same durable run engine.</span></div>
+        <div class="r-row" data-hover><span>Specialist chat presets</span><span class="r-arrow" aria-hidden="true">→</span><span>Static Agents tied to a model, standing prompt and global memory.</span></div>
+        <div class="r-row" data-hover><span>A folder of scripts</span><span class="r-arrow" aria-hidden="true">→</span><span>Persistent Agent apps with network, workspace, shell, secrets and UI.</span></div>
+        <div class="r-row" data-hover><span>Figma token notes</span><span class="r-arrow" aria-hidden="true">→</span><span>Saved design systems: real token stylesheets and live galleries.</span></div>
+        <div class="r-row" data-hover><span>PowerPoint / Canva</span><span class="r-arrow" aria-hidden="true">→</span><span>Researched presentations with an approval step and PPTX export.</span></div>
+      </div>
+    </section>
+
+    <!-- ══ CTA banner ══ -->
+    <section class="cta-banner" data-reveal>
+      <h2>Chat is where AI <span class="dim">talks.</span><br/>OmniStack is where it <span class="grad">works.</span></h2>
+      <button class="btn btn-primary btn-lg" id="open-demo-2" data-hover data-magnet>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>
+        See it in Action
+      </button>
+    </section>
+
+    <!-- ══ Download ══ -->
+    <section class="section" id="download">
+      <div class="section-head" data-reveal>
+        <div class="section-tag">// GET THE HARNESS</div>
+        <h2 class="section-title">Download <span class="grad">OmniStack.</span></h2>
+        <p class="section-sub">Free and open. Desktop brain, pocket companion — the same durable work, wherever you are.</p>
+      </div>
+      <div class="download-grid">
+        <a class="dl-card" href="https://example.com/omnistack/download/macos" target="_blank" rel="noopener" data-tilt data-hover data-reveal>
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M17.05 12.54c-.03-2.9 2.37-4.29 2.48-4.36-1.35-1.98-3.46-2.25-4.21-2.28-1.79-.18-3.5 1.06-4.4 1.06-.91 0-2.31-1.03-3.8-1-1.95.03-3.75 1.14-4.76 2.88-2.03 3.52-.52 8.74 1.46 11.6.97 1.4 2.12 2.97 3.63 2.91 1.46-.06 2.01-.94 3.77-.94s2.26.94 3.8.91c1.57-.03 2.57-1.42 3.53-2.83 1.11-1.62 1.57-3.19 1.6-3.27-.04-.02-3.07-1.18-3.1-4.68zM14.14 4.06c.8-.97 1.34-2.32 1.19-3.66-1.15.05-2.55.77-3.38 1.74-.74.86-1.39 2.23-1.22 3.55 1.29.1 2.6-.65 3.41-1.63z"/></svg>
+          <h3>macOS</h3>
+          <p>Apple Silicon &amp; Intel · .dmg</p>
+          <span class="dl-link">Download
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+          </span>
         </a>
-        <a href="#" class="btn btn-primary btn-lg download-btn" style="display: inline-flex; align-items: center; gap: 12px;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.25l-6 .03V5.24L20 3zM3 13l6 .06v6.84l-6-1.11V13zm7 .09l14 .12V22l-14-2.46V13.09z"></path>
-          </svg>
-          Download for Windows
+        <a class="dl-card" href="https://example.com/omnistack/download/windows" target="_blank" rel="noopener" data-tilt data-hover data-reveal>
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M3 5.5l8-1.1v7.1H3zM12 4.3l9-1.3v8.5h-9zM3 12.5h8v7.1l-8-1.1zM12 12.5h9v8.5l-9-1.3z"/></svg>
+          <h3>Windows</h3>
+          <p>Windows 10/11 · .exe installer</p>
+          <span class="dl-link">Download
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+          </span>
+        </a>
+        <a class="dl-card" href="https://example.com/omnistack/download/linux" target="_blank" rel="noopener" data-tilt data-hover data-reveal>
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M12 2.5c-1.9 0-3.1 1.5-3.1 3.4 0 1 .2 2 .5 3-1 1.1-2 2.8-2.3 4.6-.3 1.6-.4 3.4.6 4.6.8 1 2.1 1.6 3.9 1.6h.8c1.8 0 3.1-.6 3.9-1.6 1-1.2.9-3 .6-4.6-.3-1.8-1.3-3.5-2.3-4.6.3-1 .5-2 .5-3 0-1.9-1.2-3.4-3.1-3.4zM9.9 6.6c.5 0 .8.4.8.8s-.3.8-.8.8-.8-.4-.8-.8.3-.8.8-.8zm4.2 0c.5 0 .8.4.8.8s-.3.8-.8.8-.8-.4-.8-.8.3-.8.8-.8zM12 8.9c.5.2 1 .6 1.1 1.1-.3.4-.7.6-1.1.6s-.8-.2-1.1-.6c.1-.5.6-.9 1.1-1.1z"/></svg>
+          <h3>Linux</h3>
+          <p>AppImage · .deb · .rpm</p>
+          <span class="dl-link">Download
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+          </span>
+        </a>
+        <a class="dl-card dl-card-alt" href="https://example.com/omnistack/download/android" target="_blank" rel="noopener" data-tilt data-hover data-reveal>
+          <span class="dl-badge">COMPANION</span>
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M6.5 8.5h11v8.2c0 1-.8 1.8-1.8 1.8h-.5V21c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5v-2.5h-2.4V21c0 .8-.7 1.5-1.5 1.5S6.8 21.8 6.8 21v-2.5h-.5c-1 0-1.8-.8-1.8-1.8zM4 8.7C3.2 8.7 2.5 9.4 2.5 10.2v5.1c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5v-5.1c0-.8-.7-1.5-1.5-1.5zm16 0c-.8 0-1.5.7-1.5 1.5v5.1c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5v-5.1c0-.8-.7-1.5-1.5-1.5zM15.4 3.4l.9-1.5c.1-.2 0-.4-.2-.5-.2-.1-.4 0-.5.2l-1 1.6c-.8-.3-1.7-.5-2.6-.5s-1.8.2-2.6.5l-1-1.6c-.1-.2-.3-.3-.5-.2-.2.1-.3.3-.2.5l.9 1.5C6.9 4.2 5.6 5.6 5.3 7.3h13.4c-.3-1.7-1.6-3.1-3.3-3.9zM9.7 6.2c-.3 0-.6-.3-.6-.6s.3-.6.6-.6.6.3.6.6-.3.6-.6.6zm4.6 0c-.3 0-.6-.3-.6-.6s.3-.6.6-.6.6.3.6.6-.3.6-.6.6z"/></svg>
+          <h3>Android</h3>
+          <p>Companion app · approve runs from your phone</p>
+          <span class="dl-link">Download
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l-3.3-3.3-1.4 1.4L12 16.4l4.7-4.7-1.4-1.4-1.3 1.3V3h-2zM5 19h14v2H5z"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="coffee" data-reveal>
+        <p>OmniStack is free and open. If it saved your week, fuel the next build.</p>
+        <a class="btn btn-coffee btn-lg" href="https://buymeacoffee.com/nickpsarakis" target="_blank" rel="noopener" data-hover data-magnet>
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 8h12v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM16 9h1.5a2.5 2.5 0 0 1 0 5H16M7 4.5c0 1-.8 1-.8 2M11 4.5c0 1-.8 1-.8 2"/></svg>
+          Buy Me a Coffee
         </a>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" style="text-align: center;">
-    
-    <p class="footer-copy" style="text-align: center; width: 100%;">© 2026 Omni. All rights reserved.</p>
+  <!-- ══ Footer ══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="nav-logo"><span>OMNI<em>STACK</em></span></span>
+        <p>The open harness. Bring your own model, tools and rules.</p>
+      </div>
+      <div class="footer-links">
+        <a class="btn btn-ghost" href="https://github.com/BuildItCode/OmniStack" target="_blank" rel="noopener" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.15c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+          GitHub
+        </a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/nick-psarakis-a7558a209" target="_blank" rel="noopener" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          Me
+        </a>
+        <a class="btn btn-ghost" href="mailto:build.it.code@gmail.com?subject=Omnistack%20support" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5h18v14H3z"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 6l9 7 9-7"/></svg>
+          Contact
+        </a>
+        <a class="btn btn-ghost" href="docs.html" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 3h9l4 4v14H6z"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 3v5h5M9 12h6M9 15h6M9 18h4"/></svg>
+          Docs
+        </a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 OmniStack · Built by BuildItCode</span>
+      <span class="footer-sig">FINISH THE MISSION. KEEP THE CONVERSATION.</span>
+    </div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
+  <!-- ══ Demo modal ══ -->
+  <div class="modal" id="demo-modal" role="dialog" aria-modal="true" aria-label="OmniStack demo video" hidden>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-box">
+      <div class="modal-head">
+        <span class="modal-title"><span class="pulse-dot" aria-hidden="true"></span>OMNISTACK · LIVE DEMO</span>
+        <button class="modal-close" id="modal-close" aria-label="Close demo" data-hover>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+      </div>
+      <div class="modal-video">
+        <div class="video-placeholder">
+          <div class="scanlines" aria-hidden="true"></div>
+          <button class="play-btn" aria-label="Play demo video" data-hover>
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <div class="video-meta">
+            <span>DEMO REEL · 02:47</span>
+            <span>VIDEO PLACEHOLDER — DROP YOUR SHOWCASE HERE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+  <script src="scene3d.js" defer></script>
 </body>
 </html>

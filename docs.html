@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docs — OmniStack, explained like a human</title>
+<meta name="description" content="What OmniStack is, how it works, and why it feels different — explained in plain language." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5' fill='none' stroke='%2300f0ff' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff2fd6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="nav scrolled">
+    <a class="nav-logo" href="index.html" data-hover>
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <polygon points="16,2 29,9.5 29,22.5 16,30 3,22.5 3,9.5" fill="none" stroke="var(--cyan)" stroke-width="2.4"/>
+        <circle cx="16" cy="16" r="4" fill="var(--magenta)"/>
+      </svg>
+      <span>OMNI<em>STACK</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#features" data-hover>Features</a>
+      <a href="index.html#replaces" data-hover>Replaces</a>
+      <a href="docs.html" data-hover>Docs</a>
+      <a href="index.html#download" data-hover>Download</a>
+    </nav>
+    <a href="index.html#download" class="btn btn-small btn-primary" data-hover>Get OmniStack</a>
+  </header>
+
+  <main>
+    <section class="docs-hero">
+      <div class="section-tag">// DOCUMENTATION</div>
+      <h1 class="section-title">OmniStack, explained<br/><span class="grad">like a human.</span></h1>
+      <p class="section-sub">No jargon wall. Just what it is, what it does for you, and why it feels
+      different from every AI chat box you've used before.</p>
+    </section>
+
+    <article class="docs-body">
+
+      <h2>So… what is OmniStack?</h2>
+      <p>Most AI apps are a text box. You type, it answers, and the moment you close the tab the whole
+      thing evaporates. <strong>OmniStack is different: it's more than a harness, it's an agentic platform.</strong> Think of it as a capable
+      crewmate that sits inside your computer. You hand it a job — a question, a repo to fix, a deck to
+      build, a process to automate — and it actually does the job: reading your files, using tools, making
+      things, and showing you the receipts along the way.</p>
+      <p>It runs on your desktop (with a companion app for your phone), it works with the AI models
+      <strong>you</strong> choose to connect, and it never touches anything sensitive without asking first.</p>
+
+      <h2>The chat is just the front door</h2>
+      <p>Sure, you can chat with it — quick questions, small tasks, "explain this error message." That's
+      the Interactive mode, and it's fast and friendly. But behind that front door there's a whole
+      building:</p>
+      <ul>
+        <li><strong>Coding mode</strong> — point it at a project and it will look around, make changes,
+        run the tests and check its own work before claiming victory.</li>
+        <li><strong>Research mode</strong> — it gathers current sources, compares them, and tells you
+        honestly what it couldn't confirm.</li>
+        <li><strong>Planner mode</strong> — big, sprawling goals get broken into a queue of small pieces,
+        finished one bounded stage at a time.</li>
+        <li><strong>Monitoring mode</strong> — it can re-check something on a schedule and ping you when
+        things meaningfully change.</li>
+        <li><strong>Computer use</strong> — when there's no better way, it can look at your screen and,
+        with your explicit go-ahead, use the mouse and keyboard. It always looks again after acting.</li>
+      </ul>
+      <p>One objective, eight ways to execute it. You describe <em>what</em> you want; OmniStack picks
+      <em>how</em> to get there — and shows its working.</p>
+
+      <h2>Missions: the thing you'll fall in love with</h2>
+      <p>A <strong>Mission</strong> is a job that has to actually finish. Instead of babysitting a chat
+      with "ok, now do the next part," you describe the outcome once: <em>"Get the test suite green,
+      don't change the public API, show me proof."</em></p>
+      <p>OmniStack then works through it with a real plan. It saves its progress constantly, keeps a
+      permanent diary of everything it did, and attaches evidence — test output, screenshots, files it
+      changed. If it needs a decision from you, it pauses politely and waits. If your laptop dies
+      mid-run, the Mission picks up exactly where it left off. No lost work, no amnesia, no pretending.</p>
+      <div class="docs-callout">
+        Long jobs have a budget of 500 steps. If a Mission reaches it, OmniStack doesn't silently quit —
+        it asks you, plainly, whether to keep going. You're always the one who decides.
+      </div>
+      <p>When a Mission finishes, you can open a normal follow-up chat right from its result — with the
+      outcome and evidence already there — so "great, now tweak one thing" never means starting over.</p>
+
+      <h2>Agents: specialists that remember</h2>
+      <p>You know how you'd explain your coding standards or your brand voice differently to different
+      colleagues? OmniStack lets you create <strong>Agents</strong> — named specialists with their own
+      personality, instructions and memory. Make a "Release Engineer" that's fussy about verification,
+      a "Researcher" that always cites sources, a "Brand Designer" that knows your palette by heart.</p>
+      <p>They live in the model picker, one click away. Their memory carries across every job you give
+      them, so you describe your standards once — not every single time.</p>
+
+      <h2>It can build its own tools (and yours)</h2>
+      <p>This is the quietly wild part. If OmniStack needs a tool that doesn't exist, you can ask it to
+      build one. These <strong>Agent apps</strong> can talk to APIs, keep secrets encrypted, work with
+      files you approve and run sandboxed commands. Build a stock-price watcher, a release checklist
+      runner, a little dashboard — once made, they stick around for every future conversation.</p>
+      <p>It can also turn your playbooks into reusable <strong>Skills</strong> with slash commands
+      ("turn this checklist into <em>/release-audit</em>"), and connect to external services through
+      <strong>MCP servers</strong> — all from plain conversation.</p>
+
+      <h2>Automations you can actually see</h2>
+      <p>Repeatable process? Describe it once and OmniStack draws it as a flowchart — real boxes,
+      real decision diamonds, real success checks — that you can read at a glance and run whenever you
+      like. These <strong>Workflows</strong> run on the same durable engine as Missions, so they get the
+      same budgets, approvals, pause-and-resume superpowers.</p>
+
+      <h2>The creative side</h2>
+      <ul>
+        <li><strong>Design systems</strong> — describe a mood or show it a reference image, and it
+        generates a real design-token stylesheet with a live component gallery. Your decks and pages can
+        reuse the same visual language.</li>
+        <li><strong>Presentations</strong> — give it a subject, review the researched outline, approve,
+        and get a styled slide deck you can present fullscreen or export to PowerPoint.</li>
+        <li><strong>Visualizations</strong> — ask it to <em>show</em> you something — a simulation, a
+        comparison, a state machine — and you get an interactive piece with sliders and play buttons,
+        not a wall of text.</li>
+      </ul>
+      <p>Everything it makes lands in the <strong>artifact bar</strong> beside your conversation:
+      code, reports, images, decks, tools. Preview them, reopen them, download them. The chat stays a
+      chat; the good stuff stays close.</p>
+
+      <h2>Your stuff stays yours</h2>
+      <p>OmniStack is deliberately <strong>not a walled garden</strong>. You bring your own AI providers
+      and models (and can switch per conversation). You bring your files, your accounts, your rules.
+      Powerful abilities — network access, running commands, using secrets, controlling the screen —
+      are each separately gated, clearly explained, and entirely your call. Grants are visible and
+      revocable at any time. An organization can also lock down what's allowed, and the enforcement
+      happens in the app itself, not just by hiding buttons.</p>
+
+      <h2>Desktop brain, pocket companion</h2>
+      <p>The desktop app is where the heavy lifting happens, and the Android companion keeps you in the
+      loop: check on a running Mission, approve a waiting question, get a push alert when something
+      finishes or changes. Start a job at your desk, keep an eye on it from the couch.</p>
+
+      <h2>The one-paragraph version</h2>
+      <div class="docs-callout">
+        OmniStack turns the chat box into a command center. Pick any connected model or one of your
+        specialist Agents. Ask a question, change a repository, create a design system, build a
+        presentation, or launch a durable Mission. It picks a strategy, uses only the powers you
+        approved, records evidence as it goes, and pauses cleanly when it needs you. Chat is where AI
+        talks. <strong>OmniStack is where it works.</strong>
+      </div>
+
+      <div class="docs-back">
+        <a class="btn btn-ghost" href="index.html" data-hover>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M15 5l-7 7 7 7"/></svg>
+          Back to the site
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="nav-logo"><span>OMNI<em>STACK</em></span></span>
+        <p>The open harness. Bring your own model, tools and rules.</p>
+      </div>
+      <div class="footer-links">
+        <a class="btn btn-ghost" href="https://github.com/BuildItCode/OmniStack" target="_blank" rel="noopener" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.78 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.15c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+          GitHub
+        </a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/nick-psarakis-a7558a209" target="_blank" rel="noopener" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45C23.2 0 22.22 0 22.22 0z"/></svg>
+          Me
+        </a>
+        <a class="btn btn-ghost" href="mailto:build.it.code@gmail.com?subject=Omnistack%20support" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5h18v14H3z"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 6l9 7 9-7"/></svg>
+          Contact
+        </a>
+        <a class="btn btn-ghost" href="docs.html" data-hover>
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M6 3h9l4 4v14H6z"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 3v5h5M9 12h6M9 15h6M9 18h4"/></svg>
+          Docs
+        </a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 OmniStack · Built by BuildItCode</span>
+      <span class="footer-sig">FINISH THE MISSION. KEEP THE CONVERSATION.</span>
+    </div>
+  </footer>
+
+  <script>
+    /* lightweight ambient particles for the docs page */
+    (() => {
+      const fx = document.getElementById("fx");
+      const ctx = fx.getContext("2d");
+      let W, H;
+      const resize = () => {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        W = innerWidth; H = innerHeight;
+        fx.width = W * dpr; fx.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      addEventListener("resize", resize, { passive: true });
+      const COLORS = ["0,240,255", "255,47,214", "139,92,255"];
+      const ps = Array.from({ length: 50 }, () => ({
+        x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+        r: 0.6 + Math.random() * 1.6, vy: 0.1 + Math.random() * 0.35,
+        vx: (Math.random() - 0.5) * 0.1, c: COLORS[(Math.random() * 3) | 0],
+        a: 0.12 + Math.random() * 0.4, tw: Math.random() * Math.PI * 2,
+      }));
+      (function loop() {
+        ctx.clearRect(0, 0, W, H);
+        for (const p of ps) {
+          p.y -= p.vy; p.x += p.vx; p.tw += 0.04;
+          if (p.y < -8) { p.y = H + 8; p.x = Math.random() * W; }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.c},${p.a * (0.6 + 0.4 * Math.sin(p.tw))})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      })();
+    })();
+  </script>
+</body>
+</html>
