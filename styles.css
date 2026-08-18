@@ -699,6 +699,28 @@ main, .footer, .nav { position: relative; z-index: 5; }
   transform-style: preserve-3d;
   transition: border-color 0.35s, box-shadow 0.35s;
 }
+.dl-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 7px 10px;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.16), rgba(255, 47, 214, 0.16));
+  border-bottom: 1px solid rgba(0, 240, 255, 0.4);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+  pointer-events: none;
+  z-index: 2;
+}
+.dl-card:has(.dl-banner) { padding-top: 62px; }
+.dl-card-soon { cursor: default; }
+.dl-card-soon .dl-link { opacity: 0.45; }
 .dl-card::after {
   content: "";
   position: absolute;
