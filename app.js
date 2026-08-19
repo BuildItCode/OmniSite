@@ -182,7 +182,17 @@
   const openers = [document.getElementById("open-demo"), document.getElementById("open-demo-2")];
   const closeBtn = document.getElementById("modal-close");
   const backdrop = document.getElementById("modal-backdrop");
+  const videoFrame = document.getElementById("demo-video");
+  const videoSrc = videoFrame ? videoFrame.getAttribute("src") : null;
   let lastFocus = null;
+
+  const stopVideo = () => {
+    // Resetting src unloads the YouTube player so playback stops on close
+    if (videoFrame && videoSrc) {
+      videoFrame.src = "";
+      videoFrame.src = videoSrc;
+    }
+  };
 
   const openModal = () => {
     lastFocus = document.activeElement;
@@ -191,6 +201,7 @@
     closeBtn.focus();
   };
   const closeModal = () => {
+    stopVideo();
     modal.hidden = true;
     document.body.style.overflow = "";
     if (lastFocus) lastFocus.focus();
