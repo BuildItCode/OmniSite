@@ -839,7 +839,7 @@ main, .footer, .nav { position: relative; z-index: 5; }
 }
 .modal-box {
   position: relative;
-  width: min(880px, 100%);
+  width: min(1100px, calc(100vw - 32px), calc((100vh - 140px) * 16 / 9));
   border: 1px solid var(--border-strong);
   border-radius: 16px;
   background: var(--panel-solid);
