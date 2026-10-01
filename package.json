@@ -1,0 +1,11 @@
+{
+  "name": "continuum-site",
+  "private": true,
+  "scripts": {
+    "build": "esbuild harness3d.js --bundle --format=iife --target=es2020 --minify --legal-comments=eof --outfile=assets/harness3d.bundle.js",
+    "check": "node --check site.js && node --check landing.js && node --check docs.js && node --check assets/harness3d.bundle.js && node scripts/check-site.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  }
+}

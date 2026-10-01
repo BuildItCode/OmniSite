@@ -1,0 +1,553 @@
+/* ═══════════════════════════════════════════════════
+   Continuum — hero and the console illustration
+   Structure and paint only; every animation lives in motion.css.
+   ═══════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(40px, 5.2vw, 76px) var(--gutter) clamp(28px, 3.4vw, 44px);
+}
+
+/* Receding floor plane under the console. One static transform, no animation. */
+.hero-grid {
+  position: absolute;
+  left: -45%;
+  right: -45%;
+  bottom: -5%;
+  height: 48%;
+  transform: perspective(540px) rotateX(66deg);
+  transform-origin: bottom center;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 62px 62px;
+  opacity: 0.8;
+  mask-image: linear-gradient(to top, #000 4%, transparent 86%);
+  -webkit-mask-image: linear-gradient(to top, #000 4%, transparent 86%);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-wide);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 52px);
+}
+
+/* Build readout in the top-right corner of the composition. */
+.hero-spec {
+  position: absolute;
+  top: clamp(46px, 5.4vw, 82px);
+  right: var(--gutter);
+  z-index: 1;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  text-align: right;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-spec b { color: var(--signal); font-weight: 500; }
+@media (min-width: 1180px) { .hero-spec { display: flex; } }
+
+.hero-copy { max-width: 760px; }
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: 500;
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+.pulse-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  flex: none;
+  background: var(--signal);
+}
+/* Live-status echo: the same square expands and fades (motion.css). */
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--signal);
+}
+
+.hero-title {
+  margin-bottom: 20px;
+  font-size: clamp(2.3rem, 1.1rem + 4vw, 4.1rem);
+  font-weight: 600;
+  letter-spacing: -0.042em;
+  line-height: 1.02;
+}
+/* Each headline line rises from behind its own mask. */
+.hero-title .mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+.hero-title .mask-in { display: block; }
+
+/* Hand-drawn underline under the closing phrase, stroked on load. */
+.ink {
+  position: relative;
+  display: inline-block;
+  font-style: normal;
+  color: var(--signal);
+}
+.ink-stroke {
+  position: absolute;
+  left: -1%;
+  right: -1%;
+  bottom: -0.16em;
+  width: 102%;
+  height: 0.34em;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: 0.72;
+}
+
+.hero-lede {
+  max-width: 46ch;
+  margin-bottom: 28px;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+}
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-facts {
+  margin-top: 20px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+}
+
+/* ═══ Console window (illustration) ═══ */
+.hero-visual {
+  position: relative;
+  width: 100%;
+  max-width: var(--content-wide);
+  margin: 0 0 0 auto;
+  perspective: 1700px;
+}
+/* Flush to the right edge on wide screens: the console reads as a live panel
+   bleeding out of the page rather than a centred screenshot. */
+@media (min-width: 1000px) {
+  .hero-visual {
+    width: calc(100% + var(--gutter));
+    margin-right: calc(-1 * var(--gutter));
+  }
+  /* The console runs to the viewport edge; its caption stays on the gutter. */
+  .visual-caption { padding-right: var(--gutter); }
+}
+/* .hero-tilt carries the one-shot entrance turn (motion.css) and nothing else;
+   the console holds its angle instead of rotating toward the pointer. */
+
+.app-window {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--signal) 20%, var(--border));
+  border-radius: var(--radius-xlarge);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--elevated-background) 88%, transparent), var(--panel-background) 42%);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #000 55%, transparent),
+    0 0 30px -20px color-mix(in srgb, var(--accent) 34%, transparent),
+    0 50px 90px -58px #000000;
+  overflow: hidden;
+  will-change: transform;
+}
+/* Fine scanline texture over the console face. */
+.app-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--signal) 8%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.6;
+}
+/* Scanner band crossing the console face. The window's own overflow clips it,
+   so the sweep never bleeds past the frame (motion.css drives it). */
+.console-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 5;
+  height: 170px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--signal) 9%, transparent) 62%,
+    transparent
+  );
+}
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--sidebar-background) 88%, transparent);
+}
+.app-bar .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-circle);
+  background: var(--control-border);
+}
+.app-bar .dot:first-child {
+  background: var(--signal);
+}
+.app-title {
+  margin-left: 8px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+.app-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--signal) 26%, var(--border));
+  border-radius: var(--radius-small);
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.app-pill::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+}
+
+.app-body {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr) 210px;
+  min-height: 366px;
+}
+.app-rail {
+  padding: 14px 10px;
+  border-right: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--sidebar-background) 72%, transparent);
+}
+.rail-label {
+  display: block;
+  margin: 0 4px 8px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.rail-label + .rail-label, .rail-item + .rail-label { margin-top: 15px; }
+.rail-item {
+  display: block;
+  padding: 7px 9px;
+  border-left: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rail-item.is-active {
+  border-left-color: var(--signal);
+  background: linear-gradient(90deg, var(--signal-soft), transparent 88%);
+  color: var(--text-primary);
+}
+
+.app-chat {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.bubble {
+  max-width: 94%;
+  padding: 10px 13px;
+  border-radius: var(--radius-panel);
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+.bubble-user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent) 88%, transparent);
+  color: var(--on-accent);
+  border-bottom-right-radius: var(--radius-small);
+  min-height: 40px;
+  box-shadow: 0 0 24px -10px color-mix(in srgb, var(--accent) 90%, transparent);
+}
+.bubble-user::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.14em;
+  background: currentColor;
+  opacity: 0;
+}
+.app-window.is-typing .bubble-user::after { opacity: 1; }
+.bubble-agent {
+  align-self: flex-start;
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--elevated-background) 70%, transparent);
+  color: var(--text-secondary);
+  border-bottom-left-radius: var(--radius-small);
+}
+.bubble-agent b { color: var(--text-primary); font-weight: 500; }
+.tool-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+.tool-chips span {
+  padding: 3px 8px;
+  border: 1px solid color-mix(in srgb, var(--signal) 22%, var(--border));
+  border-radius: var(--radius-small);
+  color: var(--signal);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+}
+
+/* Budget readout: a HUD track with tick marks. */
+.run-inline {
+  margin-top: auto;
+  padding: 13px 14px;
+  border: 1px solid color-mix(in srgb, var(--signal) 24%, var(--border));
+  border-left: 2px solid var(--signal);
+  border-radius: var(--radius-panel);
+  background: linear-gradient(180deg, var(--signal-soft), transparent 74%);
+}
+.run-inline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+.run-inline-head span:first-child { min-width: 0; }
+.run-inline-bar {
+  position: relative;
+  height: 6px;
+  margin: 11px 0 9px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--signal) 12%, transparent);
+  overflow: hidden;
+}
+.run-inline-bar i {
+  display: block;
+  height: 100%;
+  width: 34%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--signal) 58%, transparent), var(--signal));
+}
+.run-inline-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--panel-background) 90%, transparent) 0 1px,
+    transparent 1px 14px
+  );
+}
+.run-inline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+}
+
+.app-side {
+  padding: 13px 12px;
+  border-left: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--sidebar-background) 60%, transparent);
+}
+.side-tabs { display: flex; gap: 3px; margin-bottom: 12px; }
+.side-tab {
+  padding: 6px 6px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.side-tab:hover { color: var(--text-secondary); }
+.side-tab[aria-selected="true"] {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+.side-panel { display: none; }
+.side-panel.is-active { display: block; }
+.out-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 9px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-small);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.out-item + .out-item { margin-top: 7px; }
+.out-item svg { flex: none; color: var(--signal); }
+
+.activity-step {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 9px;
+  padding-bottom: 13px;
+  position: relative;
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  transition: color 0.4s var(--ease-out);
+}
+.activity-step::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 16px;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+.activity-step:last-child { padding-bottom: 0; }
+.activity-step:last-child::before { display: none; }
+.activity-step i {
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
+  border: 1px solid var(--control-border);
+  background: var(--panel-background);
+  transition: border-color 0.4s, background 0.4s;
+}
+.activity-step.is-on { color: var(--text-secondary); }
+.activity-step.is-on i {
+  border-color: var(--signal);
+  background: var(--signal);
+}
+.activity-step b { color: var(--text-primary); font-weight: 500; }
+
+.visual-caption {
+  margin: 14px 2px 0;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  text-align: right;
+}
+
+/* ═══ Readout strip ═══ */
+.spec-strip {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-wide);
+  margin: clamp(30px, 3.6vw, 50px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+}
+.spec {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 20px 22px 2px 0;
+}
+.spec + .spec { padding-left: 22px; border-left: 1px solid var(--rule); }
+/* Crosshair tick where each readout meets the rule. */
+.spec::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 1px;
+  height: 9px;
+  background: var(--signal);
+}
+.spec + .spec::before { left: 22px; }
+.spec-num {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.spec-key {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+@media (max-width: 1040px) {
+  .app-body { grid-template-columns: 138px minmax(0, 1fr) 188px; }
+}
+@media (max-width: 880px) {
+  .app-body { grid-template-columns: 132px minmax(0, 1fr); min-height: 330px; }
+  .app-side { display: none; }
+}
+@media (max-width: 760px) {
+  .spec-strip { grid-template-columns: 1fr; }
+  .spec { padding-right: 0; }
+  .spec + .spec {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--rule);
+    margin-top: 4px;
+  }
+  .spec + .spec::before { left: 0; }
+}
+@media (max-width: 540px) {
+  .app-body { grid-template-columns: minmax(0, 1fr); }
+  .app-rail { display: none; }
+}
