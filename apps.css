@@ -1,0 +1,108 @@
+/* Standalone Continuum apps and their own platform downloads. */
+.continuum-app {
+  border-top: 1px solid #ccd5e5;
+  padding-top: 38px;
+}
+.continuum-app-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 48px;
+}
+.continuum-app-copy > .eyebrow { color: #526580; }
+.continuum-app-copy h3 {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 18px;
+  font-size: clamp(26px, 2.8vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -.045em;
+}
+.continuum-app-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #365cdf;
+  color: white;
+  box-shadow: 0 5px 12px #365cdf26;
+}
+.continuum-app-icon svg { width: 28px; height: 28px; }
+.continuum-app-copy > p:last-child {
+  margin-top: 18px;
+  max-width: 490px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.app-download-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  max-width: none;
+}
+.app-download-options .button {
+  min-width: 0;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 17px 15px;
+  font-size: 12px;
+  border: 1px solid #c2ccdd;
+  background: #f5f8ff;
+  color: #203c79;
+}
+.app-download-options .button:nth-child(2) {
+  border-color: #c2ccdd;
+  background: #f5f8ff;
+  color: #203c79;
+}
+.app-download-options .button:disabled {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  color: #5c6a80;
+  background: #f5f8ff80;
+}
+.app-download-options .button svg { flex-shrink: 0; margin-left: auto; }
+.app-download-options small { font-size: 10px; opacity: 1; }
+.app-download-note {
+  margin-top: 13px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #526580;
+}
+.app-connection-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 17px 20px;
+  margin-top: 28px;
+  border: 1px solid #d0daeb;
+  border-radius: 8px;
+  background: #f5f8ff80;
+  color: #526580;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.app-connection-note > svg { flex-shrink: 0; width: 18px; height: 18px; margin-top: 3px; }
+.app-connection-note a { color: #254bbe; text-decoration: underline; text-underline-offset: 3px; }
+.continuum-app .design-editor-figure { margin-top: 30px; }
+@media (max-width: 1150px) {
+  .continuum-app-header { grid-template-columns: 1fr; gap: 26px; }
+  .continuum-app-copy > p:last-child { max-width: 650px; }
+  .continuum-app-downloads { max-width: 590px; }
+}
+@media (max-width: 680px) {
+  .continuum-app { padding-top: 28px; }
+  .continuum-app-copy h3 { gap: 12px; font-size: clamp(23px, 6vw, 32px); }
+  .continuum-app-icon { width: 43px; height: 43px; border-radius: 11px; }
+  .continuum-app-icon svg { width: 24px; height: 24px; }
+  .continuum-app-copy > p:last-child { font-size: 13px; }
+  .app-download-options { grid-template-columns: 1fr; }
+  .app-download-options .button { padding: 16px 18px; }
+  .app-connection-note { padding: 14px; margin-top: 24px; }
+}

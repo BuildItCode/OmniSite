@@ -26,7 +26,7 @@
   const profiles = {
     code: { agent: 'Software engineer', initial: 'S', heading: 'Build a website for my next big idea', summary: '8 reads · 3 changes', duration: '2 min 14 s', file: 'index.html', second: 'styles.css', kind: 'Website', detailTitle: 'From concept to a working site', detail: 'A colorful hero, scroll-driven graphics, and responsive layouts. Open the preview alongside the conversation and keep shaping the result.', thinking: 'Review the brief, establish a visual direction, then build and check the responsive page.' },
     research: { agent: 'Researcher', initial: 'R', heading: 'Find the opportunity. Build a launch brief.', summary: '12 sources · 2 outputs', duration: '3 min 08 s', file: 'launch-brief.md', second: 'sources.md', kind: 'Research brief', detailTitle: 'A direction worth exploring', detail: 'The findings bring the market, open questions and potential opportunities together. Your brief and supporting sources stay here for the next conversation.', thinking: 'Compare the available sources, separate evidence from assumptions, and organize the findings into a useful launch brief.' },
-    design: { agent: 'Designer', initial: 'D', heading: 'Create an onboarding experience for my app', summary: '2 screens · 1 design system', duration: '2 min 42 s', file: 'onboarding.canvas', second: 'tokens.json', kind: 'Editable design', detailTitle: 'A foundation for the next screen', detail: 'Two onboarding concepts, a considered palette, and reusable components. Explore the visual direction alongside the conversation, then refine it together.', thinking: 'Map the first-run experience, explore two screens, and define consistent typography, colors and components.' },
+    design: { agent: 'Designer', initial: 'D', heading: 'Create an onboarding experience for my app', summary: '2 screens · 1 design system', duration: '2 min 42 s', file: 'onboarding.omnidesign.json', second: 'tokens.json', kind: 'Continuum Design file', detailTitle: 'A foundation for the next screen', detail: 'Two onboarding concepts created through the connected Continuum Design app. Preview the direction here, then refine the editable file in Design or continue in this chat.', thinking: 'Use the Continuum Design MCP connection to create two editable screens, then define consistent typography, colors and components.' },
     schedule: { agent: 'Main', initial: 'M', heading: 'Keep a daily price history I can explore', summary: '1 plan · ready for review', duration: '48 s', file: 'price-tracking-plan.md', second: 'schedule.json', kind: 'Scheduled work plan', detailTitle: 'A plan you can come back to', detail: 'Review the cadence, source and execution budget before starting. Each completed reading can add a dated entry, so the history is ready for your next question.', thinking: 'Define the source, schedule and saved result. Prepare a plan with clear criteria and a reviewable execution budget.' }
   };
   const scenarios = {
@@ -44,9 +44,9 @@
     },
     design: {
       prompt: 'Design the onboarding screens for my app, then create a reusable visual system.',
-      response: 'I’ll shape an onboarding flow, create editable screens, and collect the typography, colors and components for your next idea.',
-      steps: [['Flow outlined', 'Direction set'], ['Screens designed', 'Editable canvas'], ['Design system created', 'Ready to reuse ↗']],
-      category: 'DESIGN / FOUNDATIONS', title: 'An idea.\nA whole system.', description: 'Onboarding screens & reusable components', file: 'onboarding.canvas'
+      response: 'With the separate Continuum Design app connected through MCP, I’ll create editable screens there and collect the typography, colors and components for your next idea.',
+      steps: [['Flow outlined', 'Direction set'], ['Screens designed', 'Saved in Design'], ['Design system created', 'Ready to reuse ↗']],
+      category: 'DESIGN / FOUNDATIONS', title: 'An idea.\nA whole system.', description: 'Onboarding screens & reusable components', file: 'onboarding.omnidesign.json'
     },
     schedule: {
       prompt: 'Track this price every day, keep a dated history, and help me explore the changes later.',
@@ -63,7 +63,7 @@
     document.querySelector('.product-demo').dataset.previewScenario = name;
     document.querySelectorAll('[data-artifact]').forEach(artifact => { artifact.hidden = artifact.dataset.artifact !== name; });
     selectInspector('preview');
-    const content = { 'conversation-title': profile.heading, 'agent-name': profile.agent, 'agent-initial': profile.initial, 'composer-agent': profile.agent + ' · medium', 'run-summary': profile.summary, 'run-duration': profile.duration, 'chat-file': profile.file, 'chat-file-secondary': profile.second, 'response-heading': profile.detailTitle, 'response-detail': profile.detail, 'thinking-detail': profile.thinking, 'preview-address': 'omnistack-artifact://my-project/' + profile.file };
+    const content = { 'conversation-title': profile.heading, 'agent-name': profile.agent, 'agent-initial': profile.initial, 'composer-agent': profile.agent + ' · medium', 'run-summary': profile.summary, 'run-duration': profile.duration, 'chat-file': profile.file, 'chat-file-secondary': profile.second, 'response-heading': profile.detailTitle, 'response-detail': profile.detail, 'thinking-detail': profile.thinking, 'preview-address': name === 'design' ? 'Continuum Design · connected through MCP' : 'omnistack-artifact://my-project/' + profile.file };
     Object.entries(content).forEach(([id, text]) => { document.getElementById(id).textContent = text; });
     document.querySelector('.product-thinking').open = false;
     document.querySelector('.product-transcript').scrollTop = 0;
@@ -87,7 +87,7 @@
 
   const designViews = {
     canvas: 'Desktop and mobile artboards share one canvas. Pan, zoom and shape the whole experience.',
-    layers: 'Organize your work with layers, components and colors. Bring in a design system or create one in chat.',
+    layers: 'Organize your work with layers, components and colors. Edit directly in Design or ask an Agent through the MCP connection.',
     properties: 'Fine-tune position, size, appearance and prototype actions. The details stay editable.'
   };
   const designViewButtons = [...document.querySelectorAll('[data-design-view]')];
