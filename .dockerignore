@@ -1,0 +1,14 @@
+.git
+node_modules
+.build
+screenshots
+.vscode
+.idea
+.env
+.env.*
+**/.env
+**/.env.*
+*.log
+*.tmp
+*.swp
+*~
